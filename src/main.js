@@ -14,7 +14,6 @@ import axios from 'axios';
 axios.defaults.baseURL = 'http://ttapi.research.itcast.cn'
 Vue.prototype.$axios = axios;
 
-
 //导入路由
 import router from '@/router/'
 
