@@ -49,7 +49,7 @@ export default {
     return {
       labelPosition: "right",
       formLabelAlign: {
-        mobile: "13800138000",
+        mobile: "18801185985",
         code: "246810",
         agree: true
       },

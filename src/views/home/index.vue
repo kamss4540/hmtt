@@ -9,67 +9,69 @@
       </div>
       <!-- 侧边导航栏 -->
       <el-scrollbar :native="false">
-  <el-menu
-        default-active="2"
-        class="el-menu-vertical-demo"
-        @open="handleOpen"
-        @close="handleClose"
-        background-color="#545c64"
-        text-color="#fff"
-        active-text-color="#ffd04b"
-      >
-        <el-menu-item index="1">
-          <span slot="title">首页</span>
-        </el-menu-item>
+        <el-menu
+          default-active="2"
+          class="el-menu-vertical-demo"
+          @open="handleOpen"
+          @close="handleClose"
+          background-color="#353b4e"
+          text-color="#fff"
+          active-text-color="#ffd04b"
+          :unique-opened="true"
+        >
+          <el-menu-item index="1">
+            <i class="el-icon-s-home"></i>
+            <span slot="title">首页</span>
+          </el-menu-item>
 
-        <el-submenu index="2">
-          <template slot="title">
-            <span>内容管理</span>
-          </template>
+          <el-submenu index="2">
+            <template slot="title">
+              <span>内容管理</span>
+            </template>
 
-          <el-menu-item index="2-1">发布文章</el-menu-item>
-          <el-menu-item index="2-2">内容列表</el-menu-item>
-          <el-menu-item index="2-3">评论列表</el-menu-item>
-          <el-menu-item index="2-4">素材管理</el-menu-item>
-        </el-submenu>
+            <el-menu-item index="2-1">发布文章</el-menu-item>
+            <el-menu-item index="2-2">内容列表</el-menu-item>
+            <el-menu-item index="2-3">评论列表</el-menu-item>
+            <el-menu-item index="2-4">素材管理</el-menu-item>
+          </el-submenu>
 
-        <el-submenu index="3">
-          <template slot="title">
-            <span>粉丝管理</span>
-          </template>
+          <el-submenu index="3">
+            <template slot="title">
+              <span>粉丝管理</span>
+            </template>
 
-          <el-menu-item index="3-1">图文数据</el-menu-item>
-          <el-menu-item index="3-2">粉丝概况</el-menu-item>
-          <el-menu-item index="3-3">粉丝画像</el-menu-item>
-          <el-menu-item index="3-4">粉丝列表</el-menu-item>
-        </el-submenu>
+            <el-menu-item index="3-1">图文数据</el-menu-item>
+            <el-menu-item index="3-2">粉丝概况</el-menu-item>
+            <el-menu-item index="3-3">粉丝画像</el-menu-item>
+            <el-menu-item index="3-4">粉丝列表</el-menu-item>
+          </el-submenu>
 
-        <el-menu-item index="4">
-          <span slot="title">账户信息</span>
-        </el-menu-item>
-      </el-menu>
+          <el-menu-item index="4">
+            <span slot="title">账户信息</span>
+          </el-menu-item>
+        </el-menu>
       </el-scrollbar>
-
-    
     </el-aside>
     <!-- 头部 -->
     <el-container>
       <el-header>
         <span class="company">江苏传智播客教育科技股份有限公司</span>
-        <el-dropdown trigger="click">
+        <el-dropdown @command="itemClick" trigger="click">
           <span class="el-dropdown-link">
             <img :src="this.photo" alt />
             <div class="userName">{{name}}</div>
             <i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>个人信息</el-dropdown-item>
-            <el-dropdown-item>Git地址</el-dropdown-item>
-            <el-dropdown-item divided>退出</el-dropdown-item>
+            <el-dropdown-item command="a">个人信息</el-dropdown-item>
+            <el-dropdown-item command="git">Git地址</el-dropdown-item>
+            <el-dropdown-item command="exit" divided>退出</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-header>
-      <el-main>Main</el-main>
+      <el-main>
+        <router-view></router-view>
+      </el-main>
     </el-container>
   </el-container>
 </template>
@@ -84,6 +86,14 @@ export default {
     };
   },
   methods: {
+    itemClick(command) {
+      if (command == "git") {
+        window.open("http://www.github.com");
+      } else if (command == "exit") {
+        window.localStorage.removeItem("token");
+        this.$router.push("/login");
+      }
+    },
     handleOpen(key, keyPath) {
       window.console.log(key, keyPath);
     },
@@ -93,8 +103,6 @@ export default {
   },
   created() {
     let obj = JSON.parse(window.localStorage.getItem("token"));
-
-    window.console.log(obj);
     this.name = obj.name;
     this.photo = obj.photo;
   }
@@ -104,71 +112,48 @@ export default {
 <style lang="less">
 body {
   overflow: hidden;
-}
-.el-container {
-  height: 100%;
 
-  .el-aside {
-    background-color: #353b4e;
+  .el-container {
+    height: 100%;
 
-    .logo {
-      height: 60px;
-      background-color: #2e2f32;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    .el-aside {
+      background-color: #323745;
+      overflow: hidden;
+
+      .el-menu {
+        border: 0;
+      }
+
+      .logo {
+        height: 60px;
+        background-color: #2e2f32;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
     }
-  }
 
-  .el-header {
-    display: flex;
-    justify-content: space-between;
-
-    .el-dropdown-link {
+    .el-header {
       display: flex;
-      align-items: center;
-      cursor: pointer;
+      justify-content: space-between;
+      background-color: #b3c0d1;
+      color: #333;
+      text-align: center;
+      line-height: 60px;
 
-      img {
-        width: 35px;
-        height: 35px;
-        border-radius: 50%;
-        margin-right: 5px;
+      .el-dropdown-link {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+
+        img {
+          width: 35px;
+          height: 35px;
+          border-radius: 50%;
+          margin-right: 5px;
+        }
       }
     }
   }
-}
-.el-header,
-.el-footer {
-  background-color: #b3c0d1;
-  color: #333;
-  text-align: center;
-  line-height: 60px;
-}
-
-.el-aside {
-  background-color: #d3dce6;
-  color: #333;
-  text-align: center;
-}
-
-.el-main {
-  background-color: #e9eef3;
-  color: #333;
-  text-align: center;
-  line-height: 160px;
-}
-
-body > .el-container {
-  margin-bottom: 40px;
-}
-
-.el-container:nth-child(5) .el-aside,
-.el-container:nth-child(6) .el-aside {
-  line-height: 260px;
-}
-
-.el-container:nth-child(7) .el-aside {
-  line-height: 320px;
 }
 </style>
