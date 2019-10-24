@@ -47,17 +47,26 @@
         <el-table-column prop="cover" label="封面" width="180">
           <template slot-scope="scope">
             <!-- <span style="margin-left: 10px">{{ scope.row }}</span> -->
-            <img :src="scope.row.cover.images" alt="" width="100px" height="100px">
+            <img :src="scope.row.cover.images" alt width="100px" height="100px" />
           </template>
         </el-table-column>
         <el-table-column prop="title" label="标题" width="180"></el-table-column>
         <el-table-column prop="status" label="状态"></el-table-column>
         <el-table-column prop="pubdate" label="发布时间"></el-table-column>
         <el-table-column label="操作">
-          <el-button type="success">修改</el-button>
-          <el-button type="danger">删除</el-button>
+          <template slot-scope="scope">
+            <el-button type="success">修改</el-button>
+            <el-button type="danger" @click="del(scope.row)">删除</el-button>
+          </template>
         </el-table-column>
       </el-table>
+
+      <el-pagination
+        @current-change="pageChange"
+        background
+        layout="prev, pager, next"
+        :total="1000"
+      ></el-pagination>
     </el-card>
   </el-scrollbar>
 </template>
@@ -92,11 +101,52 @@ export default {
   methods: {
     search() {
       let params = {
-        status: this.status == "" ? undefined : this.status,
+        status: this.status === "" ? undefined : this.status,
         channel_id: this.id == "" ? undefined : this.id,
         begin_pubdate: this.value1[0],
         end_pubdate: this.value1[1],
         page: 1,
+        per_page: 10
+      };
+
+      let obj = JSON.parse(window.localStorage.getItem("token"));
+
+      this.$axios
+        .get("/mp/v1_0/articles", {
+          headers: {
+            Authorization: "Bearer " + obj.token
+          },
+          params
+        })
+        .then(res => {
+          window.console.log(res);
+          let results = res.data.data;
+          this.num = results.total_count;
+          this.tableData = results.results;
+        });
+    },
+    del(data) {
+      let obj = JSON.parse(window.localStorage.getItem("token"));
+      this.$axios
+        .delete(`/mp/v1_0/articles/${data.id}`, {
+          headers: {
+            Authorization: `Bearer ${obj.token}`
+          }
+        })
+        .then(() => {
+          this.$message.success("删除成功！");
+          // 刷新当前页数据
+          this.loadData();
+        });
+      // .catch(() => this.$message.error("删除失败！"));
+    },
+    pageChange(page) {
+      let params = {
+        status: this.status === "" ? undefined : this.status,
+        channel_id: this.id == "" ? undefined : this.id,
+        begin_pubdate: this.value1[0],
+        end_pubdate: this.value1[1],
+        page,
         per_page: 10
       };
 

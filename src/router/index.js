@@ -10,7 +10,7 @@ Vue.use(VueRouter)
 import login from '@/views/login/'
 import home from '@/views/home/'
 import article from '@/views/home/article'
-import test from '@/views/test/'
+import publish from '@/views/home/publish'
 
 //4.设置路由规则
 const routes = [
@@ -18,7 +18,7 @@ const routes = [
     {
         path: "/home", component: home, children: [
             { path: "/article", component: article },
-            { path: "/test", component: test }
+            { path: "/publish", component: publish }
         ]
     },
     { path: "", redirect: "/login" }

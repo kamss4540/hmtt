@@ -14,6 +14,19 @@ import axios from 'axios';
 axios.defaults.baseURL = 'http://ttapi.research.itcast.cn'
 Vue.prototype.$axios = axios;
 
+import JSONbig from 'json-bigint';
+axios.defaults.transformResponse = [function (data) {
+  try {
+    // 试试，如果能转JSON就转JSON
+    return JSONbig.parse(data);
+
+  } catch (error) {
+    // 不能转会进到catch里
+    // 就直接return data，响应体长什么样子，我就给你原样返回
+    return data;
+  }
+}]
+
 //导入路由
 import router from '@/router/'
 
