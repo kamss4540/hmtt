@@ -55,7 +55,7 @@
         <el-table-column prop="pubdate" label="发布时间"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button type="success">修改</el-button>
+            <el-button type="success" @click="$router.push(`/publish/${scope.row.id}`)">修改</el-button>
             <el-button type="danger" @click="del(scope.row)">删除</el-button>
           </template>
         </el-table-column>
@@ -80,7 +80,7 @@ export default {
       status: "",
 
       //选择器
-      options: [{ id: "选项1", name: "黄金糕" }],
+      options: [{ id: "", name: "" }],
       id: "",
 
       //日期
@@ -119,12 +119,12 @@ export default {
           params
         })
         .then(res => {
-          window.console.log(res);
           let results = res.data.data;
           this.num = results.total_count;
           this.tableData = results.results;
         });
     },
+    //删除
     del(data) {
       let obj = JSON.parse(window.localStorage.getItem("token"));
       this.$axios
@@ -138,7 +138,6 @@ export default {
           // 刷新当前页数据
           this.loadData();
         });
-      // .catch(() => this.$message.error("删除失败！"));
     },
     pageChange(page) {
       let params = {
@@ -160,7 +159,6 @@ export default {
           params
         })
         .then(res => {
-          window.console.log(res);
           let results = res.data.data;
           this.num = results.total_count;
           this.tableData = results.results;

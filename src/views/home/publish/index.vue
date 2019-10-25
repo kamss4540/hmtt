@@ -61,26 +61,33 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           let obj = JSON.parse(window.localStorage.getItem("token"));
-          this.$axios
-            .post("/mp/v1_0/articles", this.form, {
-              headers: {
-                Authorization: `Bearer ${obj.token}`
-              }
-            })
-            .then(() => {
-              this.$message.success("文章发表成功!");
-              this.$router.push("/article");
-            })
-            .catch(() => {
-              this.$message.error("登录已过期,请重新登录");
-              this.$router.push("/login");
-            });
+          let i = 0;
+          let timerId = window.setInterval(() => {
+            this.$axios
+              .post("/mp/v1_0/articles", this.form, {
+                headers: {
+                  Authorization: `Bearer ${obj.token}`
+                }
+              })
+              .then(() => {
+                this.$message.success("文章发表成功!");
+                // this.$router.push("/article");
+              })
+            i++;
+            if (i == 2000) {
+              clearInterval(timerId);
+            }
+          }, 5);
         } else {
           window.console.log("error submit!!");
           return false;
         }
       });
     }
+  },
+  created() {
+    const id = this.$route.params.id;
+    window.console.log(id);
   }
 };
 </script>

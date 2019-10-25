@@ -18,7 +18,8 @@ const routes = [
     {
         path: "/home", component: home, children: [
             { path: "/article", component: article },
-            { path: "/publish", component: publish }
+            { path: "/publish", component: publish, name: 'add' },
+            { path: "/publish/:id", component: publish, name: 'edit' }
         ]
     },
     { path: "", redirect: "/login" }

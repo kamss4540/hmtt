@@ -155,7 +155,7 @@ export default {
 
   .box {
     background-color: #fff;
-    width: 400px;
+    width: 320px;
     padding: 40px;
 
     .logo {
