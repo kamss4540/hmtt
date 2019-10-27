@@ -62,10 +62,13 @@
       </el-table>
 
       <el-pagination
-        @current-change="pageChange"
-        background
-        layout="prev, pager, next"
-        :total="1000"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage4"
+        :page-sizes="[10, 20, 30, 40]"
+        :page-size="10"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
       ></el-pagination>
     </el-card>
   </el-scrollbar>
@@ -95,7 +98,13 @@ export default {
           status: "",
           pubdate: ""
         }
-      ]
+      ],
+
+      //分页插件
+      //当前页
+      currentPage4: 1,
+      //总条数
+      total: 100
     };
   },
   methods: {
@@ -122,6 +131,8 @@ export default {
           let results = res.data.data;
           this.num = results.total_count;
           this.tableData = results.results;
+          this.total = results.total_count;
+          window.console.log(res);
         });
     },
     //删除
@@ -139,7 +150,19 @@ export default {
           this.loadData();
         });
     },
-    pageChange(page) {
+
+    //分页插件事件
+    handleSizeChange(val) {
+      window.console.log(`每页 ${val} 条`);
+      this.currentPage4 == 1
+      this.loadData(1,val)
+    },
+
+    // handleCurrentChange(val) {
+    //   window.console.log(`当前页: ${val}`);
+    // },
+
+    handleCurrentChange(page) {
       let params = {
         status: this.status === "" ? undefined : this.status,
         channel_id: this.id == "" ? undefined : this.id,
@@ -147,6 +170,34 @@ export default {
         end_pubdate: this.value1[1],
         page,
         per_page: 10
+      };
+
+      let obj = JSON.parse(window.localStorage.getItem("token"));
+
+      this.$axios
+        .get("/mp/v1_0/articles", {
+          headers: {
+            Authorization: "Bearer " + obj.token
+          },
+          params
+        })
+        .then(res => {
+          let results = res.data.data;
+          this.num = results.total_count;
+          this.tableData = results.results;
+          this.total = results.total_count;
+          window.console.log(1);
+        });
+    },
+
+    loadData(page, per_page) {
+      let params = {
+        status: this.status === "" ? undefined : this.status,
+        channel_id: this.id == "" ? undefined : this.id,
+        begin_pubdate: this.value1[0],
+        end_pubdate: this.value1[1],
+        page,
+        per_page: per_page ? per_page : 10
       };
 
       let obj = JSON.parse(window.localStorage.getItem("token"));

@@ -61,8 +61,8 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           let obj = JSON.parse(window.localStorage.getItem("token"));
-          let i = 0;
-          let timerId = window.setInterval(() => {
+          // let i = 0;
+          // let timerId = window.setInterval(() => {
             this.$axios
               .post("/mp/v1_0/articles", this.form, {
                 headers: {
@@ -71,13 +71,13 @@ export default {
               })
               .then(() => {
                 this.$message.success("文章发表成功!");
-                // this.$router.push("/article");
+                this.$router.push("/article");
               })
-            i++;
-            if (i == 2000) {
-              clearInterval(timerId);
-            }
-          }, 5);
+            // i++;
+            // if (i == 2000) {
+              // clearInterval(timerId);
+            // }
+          // }, 5);
         } else {
           window.console.log("error submit!!");
           return false;

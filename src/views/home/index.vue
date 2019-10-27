@@ -106,6 +106,7 @@ export default {
     let obj = JSON.parse(window.localStorage.getItem("token"));
     this.name = obj.name;
     this.photo = obj.photo;
+    
   }
 };
 </script>
