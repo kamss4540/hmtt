@@ -11,6 +11,7 @@ import login from '@/views/login/'
 import home from '@/views/home/'
 import article from '@/views/home/article'
 import publish from '@/views/home/publish'
+import account from '@/views/home/account/'
 
 //4.设置路由规则
 const routes = [
@@ -19,10 +20,11 @@ const routes = [
         path: "/home", component: home, children: [
             { path: "/article", component: article },
             { path: "/publish", component: publish, name: 'add' },
-            { path: "/publish/:id", component: publish, name: 'edit' }
+            { path: "/publish/:id", component: publish, name: 'edit' },
+            { path: '/account', component: account }
         ]
     },
-    { path: "", redirect: "/login" }
+    { path: "", redirect: "/login" },
 ]
 
 //5.创建路由对象并使用规则

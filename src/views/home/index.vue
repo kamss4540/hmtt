@@ -27,6 +27,7 @@
 
           <el-submenu index="2">
             <template slot="title">
+              <i class="el-icon-menu"></i>
               <span>内容管理</span>
             </template>
 
@@ -38,6 +39,7 @@
 
           <el-submenu index="3">
             <template slot="title">
+              <i class="el-icon-menu"></i>
               <span>粉丝管理</span>
             </template>
 
@@ -47,7 +49,8 @@
             <el-menu-item index="3-4">粉丝列表</el-menu-item>
           </el-submenu>
 
-          <el-menu-item index="4">
+          <el-menu-item index="/account">
+            <i class="el-icon-s-tools"></i>
             <span slot="title">账户信息</span>
           </el-menu-item>
         </el-menu>

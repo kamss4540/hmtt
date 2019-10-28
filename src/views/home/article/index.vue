@@ -51,7 +51,11 @@
           </template>
         </el-table-column>
         <el-table-column prop="title" label="标题" width="180"></el-table-column>
-        <el-table-column prop="status" label="状态"></el-table-column>
+        <el-table-column prop="status" label="状态">
+          <template slot-scope="scope">
+            <el-tag>{{scope.row.status | formatStatus}}</el-tag>
+          </template>
+        </el-table-column>
         <el-table-column prop="pubdate" label="发布时间"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
@@ -107,6 +111,23 @@ export default {
       total: 100
     };
   },
+  filters: {
+    formatStatus(val) {
+      switch (val) {
+        case 0:
+          return "草稿";
+        case 1:
+          return "待审核";
+        case 2:
+          return "审核通过";
+        case 3:
+          return "审核失败";
+        case 4:
+          return "已删除";
+      }
+    }
+  },
+
   methods: {
     search() {
       let params = {
@@ -154,8 +175,8 @@ export default {
     //分页插件事件
     handleSizeChange(val) {
       window.console.log(`每页 ${val} 条`);
-      this.currentPage4 == 1
-      this.loadData(1,val)
+      this.currentPage4 == 1;
+      this.loadData(1, val);
     },
 
     // handleCurrentChange(val) {
